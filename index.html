@@ -55,7 +55,7 @@ body.widget-mode #widgetView{display:flex!important}
 .hdr-l{flex:1;min-width:0}
 #cityName{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #cityName i{color:var(--accent);margin-right:4px;font-size:13px}
-#dates{font-size:10px;color:var(--dim);margin-top:1px;line-height:1.5}
+#dates{font-size:13px;color:var(--text);margin-top:2px;line-height:1.6;font-weight:600;opacity:.85}
 .hdr-r{display:flex;gap:5px;flex-shrink:0}
 .hbtn{background:var(--card);border:1px solid var(--border);color:var(--dim);
   width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:13px;
@@ -304,6 +304,14 @@ body.widget-mode #widgetView{display:flex!important}
 .daha-btn .db-title{font-size:12px;font-weight:700;margin-bottom:2px}
 .daha-btn .db-sub{font-size:9px;color:var(--dim)}
 /* ---- TABBAR ---- */
+.drag-handle{cursor:grab;color:var(--dim);font-size:14px;padding:0 4px;touch-action:none;flex-shrink:0}
+.drag-handle:active{cursor:grabbing}
+.zi.dragging{opacity:.4;background:var(--accentA)!important;border-color:var(--accent)!important}
+.zi.drag-over{border-top:2px solid var(--accent)!important}
+.reset-all-btn{width:100%;padding:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+  border-radius:9px;color:#ef4444;font-size:11px;font-weight:700;font-family:inherit;
+  cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.reset-all-btn:active{background:rgba(239,68,68,.2)}
 .ez-tog{position:fixed;bottom:70px;right:10px;width:38px;height:38px;border-radius:50%;
   background:var(--card);border:1px solid var(--border);color:var(--dim);font-size:14px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;transition:all var(--tr)}
@@ -428,6 +436,7 @@ function googleTranslateElementInit(){
   </div>
   <div id="ts-cek" class="ts-sec act">
     <div class="add-row"><input type="text" id="newZikInp" data-i-placeholder="addZikir" placeholder="Kendi zikirini ekle..." maxlength="50"><button id="addZikBtn" data-i="add">Ekle</button></div>
+    <button class="reset-all-btn" onclick="resetAllZikirs()"><i class="fas fa-rotate-left"></i> Tümünü Sıfırla</button>
     <div id="zikList" class="zl"></div>
     <div id="tgSet" class="tg-set" style="display:none">
       <label data-i="targetCount">Hedef Sayisi</label>
@@ -440,7 +449,7 @@ function googleTranslateElementInit(){
         <div class="ct-disp"><div class="cn" id="ctNum">0</div><div class="ct" id="ctTgt">/ 33</div></div>
       </div>
       <button class="ct-btn" id="ctBtn" data-i="tap">Tikla</button>
-      <div class="ct-hint" data-i="dblReset">Cift tikla ile sifirla</div>
+      <div class="ct-hint">Tek tıkla say · Sıfırlamak için "Tümünü Sıfırla" butonu</div>
     </div>
     <div class="snd-row"><span><i class="fas fa-volume-high"></i> <span data-i="soundFx">Ses Efekti</span></span><button class="tog" id="sndTog"></button></div>
   </div>
@@ -490,21 +499,14 @@ function googleTranslateElementInit(){
     </div>
   </div>
   <input type="file" id="restoreInput" accept=".json" style="display:none" onchange="restoreData(event)">
-  <!-- PWA Kurulum Rehberi (DÜZELT3) -->
+  <!-- ErsenBox Telif -->
   <div id="pwaGuideBox" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:8px">
-    <div style="font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px">
-      <i class="fas fa-mobile-alt" style="color:var(--accent)"></i> Uygulamayı Telefona Yukle
+    <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:6px">👤 Prodüzent</div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Ersen Bakıcı — <span style="color:var(--accent)">ErsenBox</span></div>
+    <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:5px">🤲 Niyet ve İthaf</div>
+    <div style="font-size:11px;color:var(--text);line-height:1.8">
+      Merhum Hacı Hamit Sert ve merhume Hacı Nurgüzel Sert'in ve Bakıcı Ailelerinin ruhlarına ve tüm Müslüman kardeşlerimizin ruhlarına ithaf edilmiştir. Allah onlara rahmet eylesin, kabirlerini nur ile doldursun. Bu platform onların ruhuna sadaka-i cariye olsun inşallah. 🤲
     </div>
-    <div style="font-size:11px;color:var(--dim);line-height:1.9">
-      <b style="color:var(--text)">Android:</b> Chrome &#8250; sag ust menu &#8250; <b style="color:var(--text)">"Ana ekrana ekle"</b><br>
-      <b style="color:var(--text)">iOS:</b> Safari &#8250; paylasim butonu &#8250; <b style="color:var(--text)">"Ana Ekrana Ekle"</b><br>
-      <br>
-      <b style="color:var(--accent)">Onemli:</b> Bu sadece HTTPS adreste calisir.<br>
-      Ucretsiz yükleme: <a href="https://netlify.com" target="_blank" style="color:var(--accent)">netlify.com</a> veya <a href="https://pages.github.com" target="_blank" style="color:var(--accent)">GitHub Pages</a>
-    </div>
-    <button onclick="copyDeployGuide()" style="margin-top:10px;width:100%;padding:9px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer">
-      <i class="fas fa-copy"></i> Kurulum Adimlarini Kopyala
-    </button>
   </div>
   <!-- PWA install -->
   <button id="pwaBtn" style="display:none;width:100%;padding:12px;background:var(--accent);
@@ -552,7 +554,7 @@ function googleTranslateElementInit(){
       <div class="ct-disp"><div class="cn" id="cekNum">0</div><div class="ct" id="cekTgt">/ 33</div></div>
     </div>
     <button class="ct-btn" id="cekBtn" style="width:125px;height:125px;font-size:14px" data-i="tap">Tikla</button>
-    <div class="ct-hint" data-i="dblReset">Cift tikla ile sifirla</div>
+    <div class="ct-hint">Tek tıkla say</div>
     <div class="snd-row" style="justify-content:center;gap:10px;margin-top:12px">
       <span><i class="fas fa-volume-high"></i> <span data-i="soundFx">Ses Efekti</span></span>
       <button class="tog" id="cekSndTog"></button>
@@ -608,19 +610,91 @@ function googleTranslateElementInit(){
   </div>
 </div>
 
+<!-- ZİKİR FORM MODAL (v2 stili) -->
+<div id="zikFormMo" class="mo" style="display:none">
+  <div class="mo-c" style="max-width:420px">
+    <button onclick="document.getElementById('zikFormMo').style.display='none'" style="position:absolute;top:11px;right:13px;background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer"><i class="fas fa-xmark"></i></button>
+    <div id="zfTitle" style="font-size:16px;font-weight:800;margin-bottom:14px">Zikir Düzenle</div>
+    <input type="hidden" id="zfId">
+    <input type="hidden" id="zfOpenCek">
+    <div style="margin-bottom:10px">
+      <div style="font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Vird (Türkçe) *</div>
+      <input id="zfVird" type="text" placeholder="Subhanallah" maxlength="60" style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:0">
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Arapça</div>
+      <input id="zfArabic" type="text" placeholder="سبحان الله" dir="rtl" style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:18px;font-family:serif;outline:0;direction:rtl">
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Meal / Anlam</div>
+      <textarea id="zfMeal" placeholder="Allah'ı her türlü kusurdan tenzih ederim" rows="2" style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:inherit;outline:0;resize:none"></textarea>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Açıklama</div>
+      <textarea id="zfDesc" placeholder="Farz namazlardan sonra 33 kez..." rows="2" style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:inherit;outline:0;resize:none"></textarea>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Kaynak</div>
+      <input id="zfKaynak" type="text" placeholder="Buhari, Müslim..." style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:inherit;outline:0">
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Hedef Sayı</div>
+      <div style="display:flex;gap:5px;margin-bottom:6px">
+        <button onclick="document.getElementById('zfTarget').value=33" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--border);background:0 0;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">33</button>
+        <button onclick="document.getElementById('zfTarget').value=99" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--border);background:0 0;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">99</button>
+        <button onclick="document.getElementById('zfTarget').value=100" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--border);background:0 0;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">100</button>
+        <button onclick="document.getElementById('zfTarget').value=500" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--border);background:0 0;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">500</button>
+        <button onclick="document.getElementById('zfTarget').value=1000" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--border);background:0 0;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">1000</button>
+      </div>
+      <input id="zfTarget" type="number" min="1" placeholder="Özel sayı..." style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:inherit;outline:0">
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:9px;border:1px solid var(--border)">
+      <div>
+        <div style="font-size:12px;font-weight:600">Ara Uyarı</div>
+        <div style="font-size:10px;color:var(--dim)">Her N sayıda titreşim / bildirim</div>
+      </div>
+      <input id="zfInterval" type="number" min="0" placeholder="0=kapalı" style="width:80px;padding:7px 9px;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:inherit;outline:0;text-align:center">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="saveZikForm()" style="flex:1;padding:11px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit"><i class="fas fa-check"></i> Kaydet</button>
+      <button id="zfDelBtn" onclick="delZikForm()" style="display:none;padding:11px 14px;border-radius:10px;border:none;background:rgba(239,68,68,.12);color:#ef4444;font-size:13px;cursor:pointer;font-family:inherit"><i class="fas fa-trash"></i></button>
+    </div>
+  </div>
+</div>
+
 <!-- HAKKINDA MODAL -->
 <div id="hakkindaMo" class="mo" style="display:none">
-  <div class="mo-c" style="max-width:380px;text-align:center">
+  <div class="mo-c" style="max-width:400px">
     <button onclick="closeMo('hakkindaMo')" style="position:absolute;top:11px;right:13px;background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer"><i class="fas fa-xmark"></i></button>
-    <i class="fas fa-mosque" style="font-size:40px;color:var(--accent);display:block;margin-bottom:10px"></i>
-    <div style="font-size:17px;font-weight:800;margin-bottom:4px">Namaz Vakti & Kıble</div>
-    <div style="font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6">
-      GPS konumunuzu kullanarak namaz vakitleri, kıble yönü ve tesbih takibi.<br>
-      Vakit hesabı: Aladhan API — Diyanet metodu (13)
+
+    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Uygulama Hakkında</div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:4px">👤 Prodüzent</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text)">Ersen Bakıcı — <span style="color:var(--accent)">ErsenBox</span></div>
     </div>
-    <div style="background:var(--accentA);border:1px solid var(--accent);border-radius:12px;padding:14px;font-size:11px;color:var(--text);line-height:1.9;text-align:center">
-      <i class="fas fa-heart" style="color:var(--accent);display:block;margin-bottom:5px"></i>
-      Merhum Hacı Hamit Sert ve merhume Hacı Nurgüzel Sert'in ve Bakıcı Ailelerinin ruhlarına ve tüm Müslüman kardeşlerimizin ruhlarına ithaf edilmiştir. Allah onlara rahmet eylesin, kabirlerini nur ile doldursun. Bu platform onların ruhuna sadaka-i cariye olsun inşallah. 🤲
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:6px">🤲 Niyet ve İthaf</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.9">
+        Merhum Hacı Hamit Sert ve merhume Hacı Nurgüzel Sert'in ve Bakıcı Ailelerinin ruhlarına ve tüm Müslüman kardeşlerimizin ruhlarına ithaf edilmiştir. Allah onlara rahmet eylesin, kabirlerini nur ile doldursun. Bu platform onların ruhuna sadaka-i cariye olsun inşallah. 🤲
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:4px">© Telif Hakkı</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.7">
+        Bu uygulama tamamen <b>ücretsizdir</b> ve hayır amaçlıdır. Reklam içermez. Telif hakkı <b style="color:var(--accent)">ErsenBox</b>'a aittir.
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px">
+      <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:4px">📡 Kullanılan Kaynaklar</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.8">
+        Namaz vakitleri: <span style="color:var(--accent)">Aladhan API</span> — Diyanet metodu (13)<br>
+        Hava durumu: <span style="color:var(--accent)">Open-Meteo API</span><br>
+        Konum: <span style="color:var(--accent)">Nominatim / OpenStreetMap</span>
+      </div>
     </div>
   </div>
 </div>
@@ -642,11 +716,15 @@ function googleTranslateElementInit(){
       </button>
     </div>
     <div id="qrCanvas" style="display:flex;justify-content:center;margin-bottom:12px;min-height:0"></div>
-    <div style="background:var(--accentA);border:1px solid var(--accent);border-radius:10px;padding:10px 12px;font-size:10px;color:var(--text);line-height:1.8;text-align:left">
-      <b style="color:var(--accent)">Ücretsiz yayın seçenekleri:</b><br>
-      📌 <a href="https://netlify.com" target="_blank" style="color:var(--accent)">netlify.com</a> — Sürükle bırak, hemen yayınla<br>
-      📌 <a href="https://pages.github.com" target="_blank" style="color:var(--accent)">GitHub Pages</a> — index.html yükle, otomatik URL<br>
-      <span style="color:var(--dim)">HTTPS zorunlu — sadece o zaman PWA kurulum çalışır</span>
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;text-align:left">
+      <div style="font-size:10px;color:var(--dim);font-weight:600;margin-bottom:6px">📱 Uygulamayı İndir</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.9">
+        <b>Android:</b> Menü → <b style="color:var(--accent)">"Ana Ekrana Ekle"</b><br>
+        <b>iPhone:</b> Paylaş → <b style="color:var(--accent)">"Ana Ekrana Ekle"</b>
+      </div>
+    </div>
+    <div style="background:var(--accentA);border:1px solid var(--accent);border-radius:10px;padding:10px 12px;font-size:11px;color:var(--text);text-align:center">
+      © Telif hakkı <b style="color:var(--accent)">ErsenBox</b> — Ersen Bakıcı
     </div>
   </div>
 </div>
@@ -737,14 +815,14 @@ function applyLang(){
 
 /* ---- TEMALAR ---- */
 const TH={
-  medine:{bg:'#0d1117',cd:'#161b22',ac:'#2ea043',tx:'#e6edf3',dm:'#8b949e',nm:'🌙 Medine',dt:'#2ea043'},
-  gece:{bg:'#0a0a0f',cd:'#14141f',ac:'#6366f1',tx:'#e0e0e0',dm:'#7a7a8a',nm:'🌌 Gece',dt:'#6366f1'},
-  kabe:{bg:'#0f0f0f',cd:'#1a1a1a',ac:'#c9a84c',tx:'#f5f5f5',dm:'#888888',nm:'🕋 Kabe',dt:'#c9a84c'},
-  osmanli:{bg:'#1a0a0a',cd:'#2a1515',ac:'#4a90d9',tx:'#e8d5b7',dm:'#a08868',nm:'⚔️ Osmanli',dt:'#4a90d9'},
-  endulus:{bg:'#0a1210',cd:'#152420',ac:'#e07a5f',tx:'#f0e6d3',dm:'#9a8a7a',nm:'🌹 Endulus',dt:'#e07a5f'},
-  sabah:{bg:'#f0f4f8',cd:'#ffffff',ac:'#0d7a4e',tx:'#1a2332',dm:'#5a6a7a',nm:'☀️ Sabah',dt:'#0d7a4e',light:true},
-  sedef:{bg:'#faf7f2',cd:'#ffffff',ac:'#8b5e3c',tx:'#2d1f14',dm:'#8a7a6a',nm:'🤍 Sedef',dt:'#8b5e3c',light:true},
-  krem:{bg:'#fffef9',cd:'#f5f0e8',ac:'#1a6b9a',tx:'#1a2030',dm:'#7a8090',nm:'📖 Krem',dt:'#1a6b9a',light:true}
+  medine:{bg:'#1a2030',cd:'#242e42',ac:'#3ab554',tx:'#e8eef6',dm:'#a8b4c4',nm:'🌙 Medine',dt:'#3ab554'},
+  gece:{bg:'#16162a',cd:'#21213a',ac:'#7c7ff0',tx:'#e2e2f0',dm:'#9898b8',nm:'🌌 Gece',dt:'#7c7ff0'},
+  kabe:{bg:'#1e1a0e',cd:'#2c2614',ac:'#d4a84c',tx:'#f5f0e0',dm:'#b0a070',nm:'🕋 Kabe',dt:'#d4a84c'},
+  osmanli:{bg:'#1e1014',cd:'#2e1820',ac:'#5aa0e8',tx:'#eaddc8',dm:'#b89878',nm:'⚔️ Osmanli',dt:'#5aa0e8'},
+  endulus:{bg:'#141e1c',cd:'#1e2e2a',ac:'#e8907a',tx:'#f2e8da',dm:'#aaa090',nm:'🌹 Endulus',dt:'#e8907a'},
+  sabah:{bg:'#dde4ec',cd:'#eef2f7',ac:'#0a6e46',tx:'#0f1824',dm:'#4a5a6e',nm:'☀️ Sabah',dt:'#0a6e46',light:true},
+  sedef:{bg:'#e8e0d4',cd:'#f4efe6',ac:'#7a4e2c',tx:'#22140a',dm:'#6a5848',nm:'🤍 Sedef',dt:'#7a4e2c',light:true},
+  krem:{bg:'#e4e8f0',cd:'#eef1f8',ac:'#165a88',tx:'#0e1626',dm:'#526070',nm:'📖 Krem',dt:'#165a88',light:true}
 };
 let curTh=localStorage.getItem('appTh')||'medine';
 let uLat=null,uLon=null;
@@ -1311,27 +1389,88 @@ function drawComp(){
   const dm=getComputedStyle(document.documentElement).getPropertyValue('--dim').trim();
   const cd=getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
   let s='';
-  s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${dm}" stroke-width="1" opacity=".3"/>`;
-  s+=`<circle cx="${cx}" cy="${cy}" r="${r-8}" fill="${cd}" stroke="${dm}" stroke-width=".5" opacity=".4"/>`;
-  for(let dg=0;dg<360;dg+=10){
-    const rd=(dg-90)*Math.PI/180,big=dg%30===0,ir=big?r-22:r-15;
-    s+=`<line x1="${cx+ir*Math.cos(rd)}" y1="${cy+ir*Math.sin(rd)}" x2="${cx+(r-10)*Math.cos(rd)}" y2="${cy+(r-10)*Math.sin(rd)}" stroke="${dm}" stroke-width="${big?1.5:.5}" opacity="${big?.6:.3}"/>`;
+  /* 3D efekt — iç gölge halkaları */
+  s+=`<defs>
+    <radialGradient id="cg3d" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="${cd}" stop-opacity="1"/>
+      <stop offset="100%" stop-color="${dm}" stop-opacity="0.15"/>
+    </radialGradient>
+    <filter id="cshadow"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.3"/></filter>
+  </defs>`;
+  /* Dış çerçeve — 3D rim */
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#cg3d)" stroke="${dm}" stroke-width="3" opacity=".9" filter="url(#cshadow)"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r-6}" fill="${cd}" stroke="${dm}" stroke-width=".5" opacity=".5"/>`;
+  /* Derece çizgileri */
+  for(let dg=0;dg<360;dg+=5){
+    const rd=(dg-90)*Math.PI/180,big=dg%30===0,med=dg%10===0;
+    const ir=big?r-22:med?r-16:r-11;
+    s+=`<line x1="${cx+ir*Math.cos(rd)}" y1="${cy+ir*Math.sin(rd)}" x2="${cx+(r-8)*Math.cos(rd)}" y2="${cy+(r-8)*Math.sin(rd)}" stroke="${dm}" stroke-width="${big?2.5:med?1.2:.5}" opacity="${big?.8:med?.5:.25}"/>`;
   }
-  [{l:'K',d:0},{l:'D',d:90},{l:'G',d:180},{l:'B',d:270}].forEach(dd=>{
-    const rd=(dd.d-90)*Math.PI/180,lr=r-32,isN=dd.d===0;
-    s+=`<text x="${cx+lr*Math.cos(rd)}" y="${cy+lr*Math.sin(rd)}" text-anchor="middle" dominant-baseline="central" fill="${isN?'#ef4444':dm}" font-size="${isN?16:13}" font-weight="${isN?800:600}" font-family="Poppins">${dd.l}</text>`;
+  /* Kadran döner — yön etiketleri kadranla birlikte döner */
+  const rotDeg=-compHdg;
+  s+=`<g transform="rotate(${rotDeg} ${cx} ${cy})">`;
+  /* Ana yön etiketleri */
+  [{l:'K',d:0,col:'#e74c3c',sz:17},{l:'D',d:90,col:tx2,sz:14},{l:'G',d:180,col:tx2,sz:14},{l:'B',d:270,col:tx2,sz:14}].forEach(dd=>{
+    const rd=(dd.d-90)*Math.PI/180,lr=r-30;
+    s+=`<text x="${cx+lr*Math.cos(rd)}" y="${cy+lr*Math.sin(rd)}" text-anchor="middle" dominant-baseline="central" fill="${dd.col}" font-size="${dd.sz}" font-weight="800" font-family="Poppins">${dd.l}</text>`;
   });
-  const nr=(compHdg-90)*Math.PI/180,nl=55;
-  s+=`<line x1="${cx}" y1="${cy}" x2="${cx+nl*Math.cos(nr)}" y2="${cy+nl*Math.sin(nr)}" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>`;
-  s+=`<line x1="${cx}" y1="${cy}" x2="${cx-nl*.6*Math.cos(nr)}" y2="${cy-nl*.6*Math.sin(nr)}" stroke="${dm}" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>`;
-  const qr=(qibAng-90)*Math.PI/180,ql=72;
+  [{l:'KD',d:45},{l:'GD',d:135},{l:'GB',d:225},{l:'KB',d:315}].forEach(dd=>{
+    const rd=(dd.d-90)*Math.PI/180,lr=r-30;
+    s+=`<text x="${cx+lr*Math.cos(rd)}" y="${cy+lr*Math.sin(rd)}" text-anchor="middle" dominant-baseline="central" fill="${dm}" font-size="9" font-weight="600" font-family="Poppins">${dd.l}</text>`;
+  });
+  /* Kuzey oku — kırmızı üçgen, her zaman kadranın üstünde */
+  s+=`<polygon points="${cx},${cy-r+24} ${cx-9},${cy-r+48} ${cx+9},${cy-r+48}" fill="#e74c3c"/>`;
+  s+=`<polygon points="${cx},${cy+r-24} ${cx-9},${cy+r-48} ${cx+9},${cy+r-48}" fill="${dm}" opacity=".35"/>`;
+  s+=`</g>`;
+  /* Kıble oku — ekran koordinatlarında sabit, cihaz döndükçe güncellenir */
+  /* DOĞRU HESAP: kıble açısı (coğrafi kuzeyden) - cihaz başlığı = ekranda gerçek yön */
+  const qibScreen=qibAng-compHdg;
+  const qr=(qibScreen-90)*Math.PI/180,ql=80;
   const qx=cx+ql*Math.cos(qr),qy=cy+ql*Math.sin(qr);
-  s+=`<line x1="${cx}" y1="${cy}" x2="${qx}" y2="${qy}" stroke="${ac}" stroke-width="3" stroke-linecap="round" opacity=".9"/>`;
-  const pr2=qr+Math.PI/2,bw=6;
-  s+=`<polygon points="${qx},${qy} ${qx-13*Math.cos(qr)+bw*Math.cos(pr2)},${qy-13*Math.sin(qr)+bw*Math.sin(pr2)} ${qx-13*Math.cos(qr)-bw*Math.cos(pr2)},${qy-13*Math.sin(qr)-bw*Math.sin(pr2)}" fill="${ac}" opacity=".8"/>`;
-  s+=`<circle cx="${cx}" cy="${cy}" r="4" fill="${ac}"/>`;
-  s+=`<circle cx="${cx}" cy="${cy}" r="2" fill="${cd}"/>`;
+  const qBack=qr+Math.PI,qbx=cx+30*Math.cos(qBack),qby=cy+30*Math.sin(qBack);
+  /* Gövde */
+  s+=`<line x1="${qbx}" y1="${qby}" x2="${qx}" y2="${qy}" stroke="${ac}" stroke-width="5" stroke-linecap="round"/>`;
+  /* Ok başı */
+  const perp=qr+Math.PI/2;
+  s+=`<polygon points="${qx},${qy} ${qx-18*Math.cos(qr)+9*Math.cos(perp)},${qy-18*Math.sin(qr)+9*Math.sin(perp)} ${qx-18*Math.cos(qr)-9*Math.cos(perp)},${qy-18*Math.sin(qr)-9*Math.sin(perp)}" fill="${ac}"/>`;
+  /* Kıble sembol — Kabe emoji, ok ucunun ötesinde */
+  const klx=cx+(ql+20)*Math.cos(qr),kly=cy+(ql+20)*Math.sin(qr);
+  s+=`<text x="${klx}" y="${kly}" text-anchor="middle" dominant-baseline="central" font-size="14">🕋</text>`;
+  /* Merkez yuvarlak */
+  s+=`<circle cx="${cx}" cy="${cy}" r="14" fill="${cd}" stroke="${ac}" stroke-width="2"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="6" fill="${ac}"/>`;
   svg.innerHTML=s;
+  /* 3D tilt efekti — CSS ile */
+  const svgEl=document.getElementById('compSvg');
+  if(svgEl&&lastBeta!==null&&lastGamma!==null){
+    const tiltX=Math.max(-15,Math.min(15,lastBeta*0.3));
+    const tiltY=Math.max(-15,Math.min(15,lastGamma*0.3));
+    svgEl.style.transform=`perspective(400px) rotateX(${-tiltX}deg) rotateY(${tiltY}deg)`;
+    svgEl.style.transition='transform 0.1s ease';
+  }
+}
+let lastBeta=null,lastGamma=null;
+function startOrient(){
+  window.addEventListener('deviceorientation',e=>{
+    /* iOS: webkitCompassHeading en doğru — manyetik kuzeyden saat yönünde */
+    if(typeof e.webkitCompassHeading==='number'&&e.webkitCompassHeading>0){
+      compHdg=e.webkitCompassHeading;
+    } else if(e.absolute&&e.alpha!==null){
+      /* Android absolute mod — güvenilir */
+      compHdg=e.alpha;
+    } else if(e.alpha!==null){
+      /* Fallback */
+      compHdg=e.alpha;
+    }
+    lastBeta=e.beta;lastGamma=e.gamma;
+    const cw=document.getElementById('calWarn');
+    if(Math.abs(e.beta||0)>20||Math.abs(e.gamma||0)>20)cw.classList.add('sh');else cw.classList.remove('sh');
+    const as=document.getElementById('accSt');
+    if(typeof e.webkitCompassHeading==='number'&&e.webkitCompassHeading>0){as.textContent='Yüksek (iOS)';as.style.color='#22c55e';}
+    else if(e.absolute){as.textContent='Yüksek';as.style.color='#22c55e';}
+    else{as.textContent='Orta — Kalibre edin';as.style.color='#eab308';}
+    drawComp();
+  });
 }
 function initComp(){
   if(window.DeviceOrientationEvent){
@@ -1343,18 +1482,6 @@ function initComp(){
     }else startOrient();
   }
   setTimeout(()=>{if(uLat!==null)drawComp();},500);
-}
-function startOrient(){
-  window.addEventListener('deviceorientation',e=>{
-    if(e.alpha!==null){
-      compHdg=e.alpha;
-      const cw=document.getElementById('calWarn');
-      if(Math.abs(e.beta)>20||Math.abs(e.gamma)>20)cw.classList.add('sh');else cw.classList.remove('sh');
-      const as=document.getElementById('accSt');
-      if(e.absolute){as.textContent='Yuksek';as.style.color='#22c55e';}else{as.textContent='Orta';as.style.color='#eab308';}
-      drawComp();
-    }
-  });
 }
 function updateQibla(){
   if(uLat===null)return;
@@ -1372,50 +1499,173 @@ function updateQibla(){
    TESBİH
 ====================================================== */
 const DEF_Z=[
-  {id:'subhanallah',name:'Subhanallah'},{id:'elhamdulillah',name:'Elhamdulillah'},
-  {id:'allahu-ekber',name:'Allahu Ekber'},{id:'la-ilahe',name:'La ilahe illallah'},
-  {id:'salavat',name:'Salavat-i Serife'},{id:'estagfirullah',name:'Estagfirullah'}
+  {id:'subhanallah',name:'Subhanallah',arabic:'سبحان الله',meal:'Allah\'ı her türlü kusurdan tenzih ederim'},
+  {id:'elhamdulillah',name:'Elhamdulillah',arabic:'الحمد لله',meal:'Hamd yalnızca Allah\'a mahsustur'},
+  {id:'allahu-ekber',name:'Allahu Ekber',arabic:'الله أكبر',meal:'Allah en büyüktür'},
+  {id:'la-ilahe',name:'La ilahe illallah',arabic:'لا إله إلا الله',meal:'Allah\'tan başka ilah yoktur'},
+  {id:'salavat',name:'Salavat-i Serife',arabic:'اللهم صل على محمد',meal:'Allah\'ım Muhammed\'e salat et'},
+  {id:'estagfirullah',name:'Estagfirullah',arabic:'أستغفر الله',meal:'Allah\'tan mağfiret dilerim'}
 ];
 const QTGTS=[33,99,100,500];
 let td={zikirs:{},history:{},sel:null};
-function loadTD(){const s=localStorage.getItem('tsData');if(s){try{td=JSON.parse(s);}catch(e){initTD();}}else initTD();}
-function initTD(){td.zikirs={};DEF_Z.forEach(z=>td.zikirs[z.id]={name:z.name,cust:false,tgt:33,cnt:0});td.history={};td.sel=null;saveTD();}
+function loadTD(){const s=localStorage.getItem('tsData');if(s){try{td=JSON.parse(s);if(!td.order)td.order=Object.keys(td.zikirs);}catch(e){initTD();}}else initTD();}
+function initTD(){td.zikirs={};DEF_Z.forEach(z=>td.zikirs[z.id]={name:z.name,arabic:z.arabic||'',meal:z.meal||'',cust:false,tgt:33,cnt:0,interval:0});td.history={};td.sel=null;td.order=DEF_Z.map(z=>z.id);saveTD();}
 function saveTD(){localStorage.setItem('tsData',JSON.stringify(td));}
 
+function selZik(id){td.sel=id;saveTD();renderZL();}
+function delZik(id){if(!td.zikirs[id]||!td.zikirs[id].cust)return;delete td.zikirs[id];td.order=td.order.filter(x=>x!==id);if(td.sel===id)td.sel=null;saveTD();renderZL();}
 function renderZL(){
-  const l=document.getElementById('zikList');let h='';
-  for(const[id,z]of Object.entries(td.zikirs)){
-    const isSel=td.sel===id,isDn=z.cnt>=z.tgt&&z.tgt>0;
+  const l=document.getElementById('zikList');
+  if(!td.order)td.order=Object.keys(td.zikirs);
+  /* Silinmiş id'leri order'dan temizle, yeni eklenenleri sona ekle */
+  td.order=td.order.filter(id=>td.zikirs[id]);
+  Object.keys(td.zikirs).forEach(id=>{if(!td.order.includes(id))td.order.push(id);});
+  let h='';
+  td.order.forEach(id=>{
+    const z=td.zikirs[id];if(!z)return;
+    const isSel=td.sel===id,isDn=z.cnt>=(z.tgt||0)&&(z.tgt||0)>0;
     let cls='zi';if(isSel)cls+=' sel';if(isDn)cls+=' done';
-    h+=`<div class="${cls}" data-id="${id}">`;
-    h+=`<div class="zn">${z.name}</div>`;
-    if(isDn)h+=`<span class="zdone"><i class="fas fa-check"></i> Tamam</span>`;
-    h+=`<span class="zc">${z.cnt}/${z.tgt}</span>`;
-    h+=`<div class="za"><button class="cek-z" data-id="${id}" style="width:auto;padding:0 7px;font-size:9px;font-weight:700;color:#fff;background:var(--accent);border-radius:5px;border:none;cursor:pointer;height:22px">${T('tabCek')}</button>`;
-    if(z.cust){h+=`<button class="ed-z" data-id="${id}"><i class="fas fa-pen"></i></button><button class="del-z" data-id="${id}"><i class="fas fa-xmark"></i></button>`;}
+    h+=`<div class="${cls}" data-id="${id}" draggable="true">`;
+    h+=`<span class="drag-handle" title="Sırala"><i class="fas fa-grip-vertical"></i></span>`;
+    h+=`<div class="zn">${z.name}`;
+    if(z.arabic)h+=`<div style="font-size:13px;direction:rtl;color:var(--dim);margin-top:1px">${z.arabic}</div>`;
+    h+=`</div>`;
+    if(isDn)h+=`<span class="zdone"><i class="fas fa-check"></i></span>`;
+    h+=`<span class="zc">${z.cnt}/${z.tgt||33}</span>`;
+    h+=`<div class="za">`;
+    h+=`<button class="cek-z" data-id="${id}" style="width:auto;padding:0 8px;font-size:9px;font-weight:700;color:#fff;background:var(--accent);border-radius:5px;border:none;cursor:pointer;height:22px">Çek</button>`;
+    h+=`<button class="ed-z" data-id="${id}" style="width:24px;height:24px;border-radius:6px;border:none;background:rgba(255,255,255,.06);color:var(--dim);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center"><i class="fas fa-pen"></i></button>`;
+    if(z.cust)h+=`<button class="del-z" data-id="${id}" style="width:24px;height:24px;border-radius:6px;border:none;background:rgba(255,255,255,.06);color:var(--dim);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center"><i class="fas fa-xmark"></i></button>`;
     h+=`</div></div>`;
-  }
+  });
   l.innerHTML=h;
-  l.querySelectorAll('.zi').forEach(el=>el.addEventListener('click',e=>{if(e.target.closest('.za'))return;selZik(el.dataset.id);}));
+  /* Event listeners */
+  l.querySelectorAll('.zi').forEach(el=>{
+    el.addEventListener('click',e=>{if(e.target.closest('.za')||e.target.closest('.drag-handle'))return;selZik(el.dataset.id);});
+  });
   l.querySelectorAll('.del-z').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();delZik(b.dataset.id);}));
-  l.querySelectorAll('.ed-z').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();startEdZ(b.dataset.id);}));
-  l.querySelectorAll('.cek-z').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openCekMo2(b.dataset.id);}));
+  l.querySelectorAll('.ed-z').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openZikForm(b.dataset.id);}));
+  l.querySelectorAll('.cek-z').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openZikForm(b.dataset.id,true);}));
+  /* Drag-drop sıralama */
+  initDragDrop(l);
   updCArea();
 }
-function selZik(id){td.sel=id;saveTD();renderZL();}
-function delZik(id){if(!td.zikirs[id]||!td.zikirs[id].cust)return;delete td.zikirs[id];if(td.sel===id)td.sel=null;saveTD();renderZL();}
-function startEdZ(id){
-  const item=document.querySelector(`.zi[data-id="${id}"]`);if(!item)return;
-  const ne=item.querySelector('.zn'),old=td.zikirs[id].name;
-  ne.innerHTML=`<input class="ed-inp" type="text" value="${old}" maxlength="50">`;
-  const inp=ne.querySelector('input');inp.focus();inp.select();
-  function fin(){const nv=inp.value.trim();if(nv&&nv!==old){td.zikirs[id].name=nv;saveTD();}renderZL();}
-  inp.addEventListener('blur',fin);
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')fin();if(e.key==='Escape')renderZL();});
+
+/* ---- SÜRÜKLE-BIRAK SIRALAMA ---- */
+let dragSrc=null;
+function initDragDrop(container){
+  container.querySelectorAll('.zi').forEach(el=>{
+    el.addEventListener('dragstart',e=>{dragSrc=el;el.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    el.addEventListener('dragend',e=>{el.classList.remove('dragging');container.querySelectorAll('.zi').forEach(x=>x.classList.remove('drag-over'));});
+    el.addEventListener('dragover',e=>{e.preventDefault();if(el!==dragSrc){el.classList.add('drag-over');}});
+    el.addEventListener('dragleave',e=>{el.classList.remove('drag-over');});
+    el.addEventListener('drop',e=>{
+      e.preventDefault();el.classList.remove('drag-over');
+      if(!dragSrc||dragSrc===el)return;
+      const ids=[...container.querySelectorAll('.zi')].map(x=>x.dataset.id);
+      const from=ids.indexOf(dragSrc.dataset.id),to=ids.indexOf(el.dataset.id);
+      if(from===-1||to===-1)return;
+      td.order.splice(from,1);td.order.splice(to,0,dragSrc.dataset.id);
+      saveTD();renderZL();
+    });
+    /* Touch sıralama */
+    const handle=el.querySelector('.drag-handle');
+    if(handle)setupTouchDrag(handle,el,container);
+  });
 }
-document.getElementById('addZikBtn').addEventListener('click',addNZ);
-document.getElementById('newZikInp').addEventListener('keydown',e=>{if(e.key==='Enter')addNZ();});
-function addNZ(){const inp=document.getElementById('newZikInp'),nm=inp.value.trim();if(!nm)return;td.zikirs['c_'+Date.now()]={name:nm,cust:true,tgt:33,cnt:0};inp.value='';saveTD();renderZL();}
+function setupTouchDrag(handle,el,container){
+  let startY,startEl,clone;
+  handle.addEventListener('touchstart',e=>{
+    e.preventDefault();startY=e.touches[0].clientY;startEl=el;
+    startEl.style.opacity='.4';
+  },{passive:false});
+  handle.addEventListener('touchmove',e=>{
+    e.preventDefault();
+    const y=e.touches[0].clientY;
+    const els=[...container.querySelectorAll('.zi')];
+    els.forEach(x=>x.classList.remove('drag-over'));
+    const target=els.find(x=>{const r=x.getBoundingClientRect();return y>=r.top&&y<=r.bottom&&x!==startEl;});
+    if(target)target.classList.add('drag-over');
+  },{passive:false});
+  handle.addEventListener('touchend',e=>{
+    if(startEl)startEl.style.opacity='1';
+    const els=[...container.querySelectorAll('.zi')];
+    const target=els.find(x=>x.classList.contains('drag-over'));
+    els.forEach(x=>x.classList.remove('drag-over'));
+    if(target&&target!==startEl){
+      const ids=els.map(x=>x.dataset.id);
+      const from=ids.indexOf(startEl.dataset.id),to=ids.indexOf(target.dataset.id);
+      if(from!==-1&&to!==-1){td.order.splice(from,1);td.order.splice(to,0,startEl.dataset.id);saveTD();renderZL();}
+    }
+  });
+}
+
+/* ---- HEPSİNİ SIFIRLA ---- */
+function resetAllZikirs(){
+  if(!confirm('Tüm zikirleri sıfırlamak istediğinize emin misiniz?'))return;
+  Object.keys(td.zikirs).forEach(id=>{td.zikirs[id].cnt=0;});
+  saveTD();renderZL();updCD();
+}
+
+/* ---- v2 STİL ZİKİR FORM MODAL ---- */
+function openZikForm(id,openCekAfter){
+  const z=td.zikirs[id]||{};
+  const isNew=!id||!td.zikirs[id];
+  /* Form doldur */
+  document.getElementById('zfId').value=id||'';
+  document.getElementById('zfOpenCek').value=openCekAfter?'1':'';
+  document.getElementById('zfVird').value=z.name||'';
+  document.getElementById('zfArabic').value=z.arabic||'';
+  document.getElementById('zfMeal').value=z.meal||'';
+  document.getElementById('zfDesc').value=z.desc||'';
+  document.getElementById('zfKaynak').value=z.kaynak||'';
+  document.getElementById('zfTarget').value=z.tgt||33;
+  document.getElementById('zfInterval').value=z.interval||0;
+  document.getElementById('zfDelBtn').style.display=isNew?'none':'inline-flex';
+  document.getElementById('zfTitle').textContent=isNew?'Yeni Zikir':'Zikir Düzenle';
+  document.getElementById('zikFormMo').style.display='flex';
+}
+function saveZikForm(){
+  const id=document.getElementById('zfId').value||('c_'+Date.now());
+  const openCek=document.getElementById('zfOpenCek').value==='1';
+  const vird=document.getElementById('zfVird').value.trim();
+  if(!vird){alert('Zikir adı boş olamaz!');return;}
+  const isNew=!td.zikirs[id];
+  td.zikirs[id]={
+    name:vird,
+    arabic:document.getElementById('zfArabic').value.trim(),
+    meal:document.getElementById('zfMeal').value.trim(),
+    desc:document.getElementById('zfDesc').value.trim(),
+    kaynak:document.getElementById('zfKaynak').value.trim(),
+    tgt:parseInt(document.getElementById('zfTarget').value)||33,
+    interval:parseInt(document.getElementById('zfInterval').value)||0,
+    cnt:td.zikirs[id]?td.zikirs[id].cnt:0,
+    cust:true
+  };
+  if(isNew&&!td.order.includes(id))td.order.push(id);
+  saveTD();
+  document.getElementById('zikFormMo').style.display='none';
+  renderZL();
+  if(openCek)setTimeout(()=>openCekMo2(id),100);
+}
+function delZikForm(){
+  const id=document.getElementById('zfId').value;
+  if(!id)return;
+  if(!confirm('Bu zikiri silmek istediğinize emin misiniz?'))return;
+  delete td.zikirs[id];
+  td.order=td.order.filter(x=>x!==id);
+  if(td.sel===id)td.sel=null;
+  saveTD();
+  document.getElementById('zikFormMo').style.display='none';
+  renderZL();
+}
+document.getElementById('addZikBtn').addEventListener('click',()=>{
+  const inp=document.getElementById('newZikInp'),nm=inp.value.trim();
+  inp.value='';
+  if(nm){const id='c_'+Date.now();td.zikirs[id]={name:nm,arabic:'',meal:'',desc:'',kaynak:'',cust:true,tgt:33,cnt:0,interval:0};td.order.push(id);saveTD();renderZL();openZikForm(id);}
+  else{/* Boş input → yeni form aç */document.getElementById('zfId').value='';document.getElementById('zfOpenCek').value='';document.getElementById('zfVird').value='';document.getElementById('zfArabic').value='';document.getElementById('zfMeal').value='';document.getElementById('zfDesc').value='';document.getElementById('zfKaynak').value='';document.getElementById('zfTarget').value=33;document.getElementById('zfInterval').value=0;document.getElementById('zfDelBtn').style.display='none';document.getElementById('zfTitle').textContent='Yeni Zikir';document.getElementById('zikFormMo').style.display='flex';}
+});
+document.getElementById('newZikInp').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addZikBtn').click();});
 function updCArea(){
   const sel=td.sel,tgD=document.getElementById('tgSet'),ctD=document.getElementById('ctArea');
   if(!sel||!td.zikirs[sel]){tgD.style.display='none';ctD.style.display='none';return;}
@@ -1443,16 +1693,13 @@ function updCD(){
   ring.style.strokeDasharray=circ;ring.style.strokeDashoffset=circ*(1-prog);
   ring.classList.toggle('dn',isDn);
 }
-const ctBtn=document.getElementById('ctBtn');let lastClk=0;
+const ctBtn=document.getElementById('ctBtn');
 ctBtn.addEventListener('click',()=>{
-  const now=Date.now();
-  if(now-lastClk<300){rstCur();lastClk=0;return;}
-  lastClk=now;
   const sel=td.sel;if(!sel||!td.zikirs[sel])return;
   const z=td.zikirs[sel];z.cnt++;
   const ky=tKey();if(!td.history[ky])td.history[ky]={};if(!td.history[ky][sel])td.history[ky][sel]=0;td.history[ky][sel]++;
   saveTD();updCD();renderZL();
-  if(navigator.vibrate)navigator.vibrate(25);
+  if(navigator.vibrate)navigator.vibrate(30);
   playClick();
   if(z.cnt===z.tgt&&z.tgt>0)showTgtMo(sel);
 });
@@ -1479,12 +1726,12 @@ const CEK_MEAL={
   'allahu-ekber':'Allah en buyuktur','la-ilahe':'Allah\'tan baska ilah yoktur',
   'salavat':'Allahim Muhammed\'e salat et','estagfirullah':'Allah\'tan magfiret dilerim'
 };
-let cekId=null,cekLastClk=0;
+let cekId=null;
 function openCekMo2(id){
   cekId=id;const z=td.zikirs[id];if(!z)return;
   document.getElementById('cekMoName').textContent=z.name;
-  document.getElementById('cekMoArabic').textContent=CEK_ARABIC[id]||'';
-  document.getElementById('cekMoMeal').textContent=CEK_MEAL[id]||'';
+  document.getElementById('cekMoArabic').textContent=z.arabic||(CEK_ARABIC[id]||'');
+  document.getElementById('cekMoMeal').textContent=z.meal||(CEK_MEAL[id]||'');
   const st=document.getElementById('cekSndTog');if(st)st.className='tog'+(tsSnd?' on':'');
   updCekModal();
   const qb=document.getElementById('cekTgBtns');
@@ -1505,14 +1752,11 @@ function updCekModal(){
 }
 const cekBtn=document.getElementById('cekBtn');
 if(cekBtn){cekBtn.addEventListener('click',()=>{
-  const now=Date.now();
-  if(now-cekLastClk<300){if(cekId&&td.zikirs[cekId]){td.zikirs[cekId].cnt=0;saveTD();updCekModal();renderZL();}cekLastClk=0;return;}
-  cekLastClk=now;
   if(!cekId||!td.zikirs[cekId])return;
   const z=td.zikirs[cekId];z.cnt++;
   const ky=tKey();if(!td.history[ky])td.history[ky]={};if(!td.history[ky][cekId])td.history[ky][cekId]=0;td.history[ky][cekId]++;
   saveTD();updCekModal();renderZL();
-  if(navigator.vibrate)navigator.vibrate(20);
+  if(navigator.vibrate)navigator.vibrate(30);
   playClick();
   if(z.cnt===z.tgt&&z.tgt>0)showTgtMo(cekId);
 });}
